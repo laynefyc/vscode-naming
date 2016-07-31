@@ -5,9 +5,9 @@ function activate(ctx) {
     ctx.subscriptions.push(documentWatcher);
     // applyEditorConfigToTextEditor(vscode.window.activeTextEditor, documentWatcher);
     // register a command handler to generate a .editorconfig file
-    vscode.commands.registerCommand('extension.naming',naming);
-    //ctx.subscriptions.push(nam);
-    vscode.languages.registerCompletionItemProvider("*",
+    var comm_ext = vscode.commands.registerCommand('extension.naming',naming);
+    ctx.subscriptions.push(comm_ext);
+    var sug_ext = vscode.languages.registerCompletionItemProvider("*",
     {
         provideCompletionItems(document, position, token)
         {
@@ -30,6 +30,7 @@ function activate(ctx) {
             TRANS_LIST = undefined
         }
     });
+    ctx.subscriptions.push(sug_ext);
 }
 exports.activate = activate;
 /**
