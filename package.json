@@ -1,0 +1,38 @@
+{
+    "name": "naming",
+    "displayName": "naming",
+    "description": "Help chinese coder named Function or Class.",
+    "version": "0.0.1",
+    "publisher": "layneFyc",
+    "engines": {
+        "vscode": "^1.0.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./extension",
+    "contributes": {
+        "commands": [{
+            "command": "extension.naming",
+            "title": "Naming"
+        }],
+        "keybindings": [
+        {
+            "command": "extension.naming",
+            "key": "Alt+G"
+        }
+        ]
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "vscode": "^0.11.0"
+    },
+    "dependencies": {
+        "request": "^2.74.0"
+    }
+}
