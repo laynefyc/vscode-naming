@@ -2,7 +2,7 @@
     "name": "naming",
     "displayName": "naming",
     "description": "Help chinese coder named Function or Class.",
-    "version": "0.0.8",
+    "version": "1.0.1",
     "publisher": "layneFyc",
     "repository": "https://github.com/laynefyc/vscode-naming.git",
     "homepage": "https://it2048.cn",
@@ -12,14 +12,14 @@
         "vscode": "^1.0.0"
     },
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:extension.naming"
     ],
     "main": "./extension",
     "contributes": {
         "keybindings": [
-        {
+        { 
             "command": "extension.naming",
-            "key": "Alt+G"
+            "key": "Alt+."
         }]
     },
     "scripts": {
