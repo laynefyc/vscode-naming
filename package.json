@@ -1,38 +1,38 @@
 {
-    "name": "naming",
-    "displayName": "naming",
-    "description": "Help chinese coder named Function or Class.",
-    "version": "1.0.2",
-    "publisher": "layneFyc",
-    "repository": "https://github.com/laynefyc/vscode-naming.git",
-    "homepage": "https://it2048.cn",
-    "bugs": "https://github.com/laynefyc/vscode-naming/issues",
-    "license": "MIT",
-    "engines": {
-        "vscode": "^1.0.0"
-    },
-    "activationEvents": [
-        "*"
-    ],
-    "main": "./extension",
-    "contributes": {
-        "commands": [{
-            "command" : "extension.naming",
-            "title" : "Naming"
-        }],
-        "keybindings": [
-        { 
-            "command": "extension.naming",
-            "key": "Alt+."
-        }]
-    },
-    "scripts": {
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "devDependencies": {
-        "vscode": "^0.11.0"
-    },
-    "dependencies": {
-        "request": "^2.74.0"
-    }
+  "name": "naming",
+  "displayName": "naming",
+  "description": "Help chinese coder named Function or Class.",
+  "version": "1.1.0",
+  "publisher": "layneFyc",
+  "repository": "https://github.com/laynefyc/vscode-naming.git",
+  "homepage": "https://it2048.cn",
+  "bugs": "https://github.com/laynefyc/vscode-naming/issues",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./extension",
+  "contributes": {
+    "keybindings": [
+      {
+        "command": "extension.naming",
+        "key": "Alt+."
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+    "build": "node ./node_modules/vscode/bin/compile",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "vscode": "^0.11.0"
+  },
+  "dependencies": {
+    "node-fetch": "1.6.0"
+  }
 }

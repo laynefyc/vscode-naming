@@ -1,14 +1,15 @@
 var vscode = require('vscode');
+var fetch = require('node-fetch');
 var TRANS_LIST;  //translation results
 function activate(ctx) {
+
     var documentWatcher = new DocumentWatcher();
     ctx.subscriptions.push(documentWatcher);
-    // applyEditorConfigToTextEditor(vscode.window.activeTextEditor, documentWatcher);
-    // register a command handler to generate a .editorconfig file
+
     var comm_ext = vscode.commands.registerCommand('extension.naming',naming);
     ctx.subscriptions.push(comm_ext);
-    var sug_ext = vscode.languages.registerCompletionItemProvider("*",
-    {
+
+    var sug_ext = vscode.languages.registerCompletionItemProvider("*",{
         provideCompletionItems(document, position, token)
         {
             if(TRANS_LIST != undefined && 0 in TRANS_LIST)
@@ -29,10 +30,11 @@ function activate(ctx) {
             //显示之后清空
             TRANS_LIST = undefined
         }
-    });
+    },['。']);
     ctx.subscriptions.push(sug_ext);
 }
 exports.activate = activate;
+
 /**
  * Listens to vscode document open and maintains a map (Document => editor config settings)
  */
@@ -66,32 +68,7 @@ var DocumentWatcher = (function () {
                 var result = /[\u4E00-\u9FA5\uF900-\uFA2D]+$/.exec(cLine);
                 if(result !==null && 0 in result)
                 {
-                    var uri = "http://fanyi.youdao.com/openapi.do?keyfrom=vscode-naming&key=641396341&type=data&doctype=json&version=1.1&q="+encodeURI(result[0]);
-                    var request = require('request');
-                    request(uri, function (error, response, body) {
-                        if (!error && response.statusCode == 200) {
-                            var info = JSON.parse(body);
-                            if(info.basic !== undefined 
-                                && info.basic.explains !== undefined 
-                                && 0 in info.basic.explains)
-                            {
-                                //生成下划线命名和大、小驼峰命名法
-                                var src = info.basic.explains[0].toLowerCase();
-                                src = src.replace(/[|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?]/g,""); 
-                                var sug = [];
-                                sug[0] = src.replace(/ /g,'_');
-                                sug[1] = src.replace(/\ \w/g,function(s){
-                                    return s.toUpperCase().slice(1);
-                                });
-                                sug[2] = src.replace(/(^|\s+)\w/g,function(s){
-                                    return s[0]==' '?s.toUpperCase().slice(1):s.toUpperCase();
-                                });
-                                sug[3] = result[0];
-                                TRANS_LIST = sug;
-                            }
-                        }
-                    });
-                    
+                    fanyi(result[0]); 
                 }
             }
         }
@@ -102,14 +79,47 @@ var DocumentWatcher = (function () {
     }
     return DocumentWatcher;
 })();
+
+function fanyi(src_words){
+    if (src_words !== '') {
+        var uri = "http://fanyi.youdao.com/openapi.do?keyfrom=vscode-naming&key=641396341&type=data&doctype=json&version=1.1&q="+encodeURI(src_words);
+        return new Promise(function(resolve, reject){
+            fetch(uri)
+                .then(function (res) {
+                    return res.text();
+                }).then(function (body) {
+                    var info = JSON.parse(body);
+                    if(info.basic !== undefined 
+                        && info.basic.explains !== undefined 
+                        && 0 in info.basic.explains)
+                    {
+                        //生成下划线命名和大、小驼峰命名法
+                        var src = info.basic.explains[0].toLowerCase();
+                        src = src.replace(/[|\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\+|\=|\||\\|\[|\]|\{|\}|\;|\:|\"|\'|\,|\<|\.|\>|\/|\?]/g,""); 
+                        var sug = [];
+                        sug[0] = src.replace(/ /g,'_');
+                        sug[1] = src.replace(/\ \w/g,function(s){
+                            return s.toUpperCase().slice(1);
+                        });
+                        sug[2] = src.replace(/(^|\s+)\w/g,function(s){
+                            return s[0]==' '?s.toUpperCase().slice(1):s.toUpperCase();
+                        });
+                        sug[3] = src_words;
+                        TRANS_LIST = sug;
+                    }
+                }).catch(function(e) {
+                    vscode.window.showWarningMessage('Connect fail!ßßß');
+                });
+        });
+
+    }
+}
 /**
  * Generate an .editorconfig file in the root of the workspace based on the current vscode settings.
  */
 function naming() {
-    var rlt = '';
-    if(TRANS_LIST != undefined && 0 in TRANS_LIST)
-    {
-        rlt = TRANS_LIST.join(",");
-    }
-    vscode.window.showInformationMessage(rlt==''?'无结果':rlt);
+
+}
+// this method is called when your extension is deactivated
+function deactivate() {
 }
