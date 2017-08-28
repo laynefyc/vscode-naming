@@ -1,0 +1,41 @@
+{
+	"name": "naming",
+	"displayName": "naming",
+	"description": "Help chinese coder named Function or Class.",
+	"version": "1.1.0",
+	"publisher": "layneFyc",
+	"repository": "https://github.com/laynefyc/vscode-naming.git",
+	"homepage": "https://it2048.cn",
+	"bugs": "https://github.com/laynefyc/vscode-naming/issues",
+	"license": "MIT",
+    "engines": {
+        "vscode": "^1.15.0"
+    },
+    "categories": [
+        "Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+    "main": "./out/src/extension",
+    "contributes": {
+        "keybindings": [{
+            "command": "extension.xfl",
+            "key": "Alt+p"
+        }]
+    },
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.0.3",
+        "vscode": "^1.0.0",
+        "mocha": "^2.3.3",
+        "@types/node": "^6.0.40",
+		"@types/mocha": "^2.2.32",
+		"node-fetch": "^1.7.2"
+    }
+}
